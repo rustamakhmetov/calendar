@@ -1,0 +1,4 @@
+h2 #{Date.today.strftime("%^B")}
+.month
+  -Dashboard.monthdays(Date.today).each do |date|
+    div id="day#{date.day}"
