@@ -8,6 +8,7 @@ RSpec.describe DashboardController, type: :controller do
     describe "with authenticate user" do
       sign_in_user
 
+      let!(:events) { create_list(:event, 5, owner: @user) }
       subject { get :index }
 
       it 'renders index view' do

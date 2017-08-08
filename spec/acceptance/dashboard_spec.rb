@@ -9,14 +9,9 @@ feature 'User on dashboard', %q{
   given(:user) { create(:user)}
 
   describe 'Authenticate user' do
-    #let!(:courses) { create_list(:course, 10) }
+    let!(:events) { 5.times.map { |i| user.create_event(Date.today, "Body #{i}") }}
 
-    before do
-      sign_in(user)
-      # Dashboard.dates_week(Date.today).each do |day|
-      #   menus[day] = create(:menu_item_with_courses, menu: menu, created_at: day)
-      # end
-    end
+    before { sign_in(user) }
 
     scenario 'see current month on dashboard' do
       visit root_path
@@ -26,18 +21,14 @@ feature 'User on dashboard', %q{
       end
     end
 
-    # scenario 'see menu', js: true do
-    #   menu = menus[Date.today]
-    #   visit root_path
-    #   click_on Date.today.strftime("%A")
-    #   wait_for_ajax
-    #   within ".menu" do
-    #     menu.items.each do |item|
-    #       expect(page).to have_content(item.course.name)
-    #       expect(page).to have_content(item.price)
-    #     end
-    #   end
-    # end
+    scenario 'see events on dashboard' do
+      visit root_path
+      within "div#day#{Date.today.day}" do
+        events.each do |event|
+          expect(page).to have_content event.body
+        end
+      end
+    end
   end
 end
 

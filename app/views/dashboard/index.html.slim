@@ -2,3 +2,7 @@ h2 #{Date.today.strftime("%^B")}
 .month
   -Dashboard.monthdays(Date.today).each do |date|
     div id="day#{date.day}"
+      -current_user.events_by_date(date).each do |event|
+        div id="event#{event.id}"
+          p
+            =event.body
