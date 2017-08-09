@@ -8,3 +8,5 @@ div id="event#{event.id}"
       = f.text_area :body
     p
       = f.submit "Save"
+  p
+    =link_to "Edit", '', class: "edit-event-link", data: {event_id: event.id}

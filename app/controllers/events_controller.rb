@@ -10,18 +10,15 @@ class EventsController < ApplicationController
     respond_with @event
   end
 
-  # def update
-  #   @answer.update(answer_params)
-  #   respond_with @answer
-  # end
+  def update
+    @event.update(event_params)
+    respond_with @event
+  end
   #
   # def destroy
   #   respond_with(@answer.destroy!)
   # end
   #
-  # def accept
-  #   respond_with(@answer.accept!)
-  # end
 
   private
 

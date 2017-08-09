@@ -1,0 +1,6 @@
+<%= render 'layouts/flash_messages' %>
+
+<% if @event.errors.empty? %>
+  $("#event<%= @event.id %>").html('<%= j render @event %>');
+  $("#event_body").val("");
+<% end %>

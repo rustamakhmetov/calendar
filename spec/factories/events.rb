@@ -6,4 +6,8 @@ FactoryGirl.define do
   factory :event do
     body
   end
+
+  factory :invalid_event, class: "Event" do
+    body nil
+  end
 end

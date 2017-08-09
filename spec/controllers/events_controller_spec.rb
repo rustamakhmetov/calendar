@@ -21,55 +21,57 @@ RSpec.describe EventsController, type: :controller do
       end
     end
 
-    # context 'with invalid attributes' do
-    #   it 'does not save the answer' do
-    #     expect { post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js }}.to_not change(Answer, :count)
-    #   end
-    #
-    #   it 'render template create' do
-    #     post :create, params: { question_id: question, answer: attributes_for(:invalid_answer), format: :js }
-    #     expect(response).to render_template :create
-    #   end
-    # end
+    context 'with invalid attributes' do
+      it 'does not save the event' do
+        expect { post :create, params: { event: attributes_for(:invalid_event), format: :js }}.to_not change(Event, :count)
+      end
+
+      it 'render template create' do
+        post :create, params: { event: attributes_for(:invalid_event), format: :js }
+        expect(response).to render_template :create
+      end
+    end
   end
 
-  # describe 'PATCH #update' do
-  #   sign_in_user
-  #   let!(:answer) { create(:answer, user: @user) }
-  #
-  #   context 'with valid attributes' do
-  #     it 'assigns the requested answer to @answer' do
-  #       patch :update, params: {id: answer, answer: {body: 'Body new'}, format: :js}
-  #       expect(assigns(:answer)).to eq answer
-  #     end
-  #
-  #     it 'change answer attributes' do
-  #       patch :update, params: {id: answer, answer: {body: 'Body new'}, format: :js}
-  #       answer.reload
-  #       expect(answer.body).to eq 'Body new'
-  #     end
-  #
-  #     it 'render updated template' do
-  #       patch :update, params: {id: answer, answer: {body: 'Body new'}, format: :js}
-  #       expect(response).to render_template :update
-  #     end
-  #   end
-  #
-  #   context 'with invalid attributes' do
-  #     it 'does not change answer attributes' do
-  #       body = answer.body
-  #       patch :update, params: {id: answer, answer: attributes_for(:invalid_answer).merge(question_id: nil), format: :js}
-  #       answer.reload
-  #       expect(answer.body).to eq body
-  #       expect(answer.question).to_not eq nil
-  #     end
-  #
-  #     it 'render updated template' do
-  #       patch :update, params: {id: answer, answer: attributes_for(:invalid_answer).merge(question_id: nil), format: :js}
-  #       expect(response).to render_template :update
-  #     end
-  #   end
-  # end
+  describe 'PATCH #update' do
+    sign_in_user
+    let!(:event) { @user.create_event(Date.today, "event 1") }
+
+    context 'with valid attributes' do
+      it 'assigns the requested event to @event' do
+        patch :update, params: {id: event, event: {body: 'Body new'}, format: :js}
+        expect(assigns(:event)).to eq event
+      end
+
+      it 'change event attributes' do
+        patch :update, params: {id: event, event: {body: 'Body new'}, format: :js}
+        event.reload
+        expect(event.body).to eq 'Body new'
+      end
+
+      it 'render updated template' do
+        patch :update, params: {id: event, event: {body: 'Body new'}, format: :js}
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not change event attributes' do
+        body = event.body
+        patch :update, params: {id: event,
+                                event: attributes_for(:invalid_event).merge(owner_id: nil), format: :js}
+        event.reload
+        expect(event.body).to eq body
+        expect(event.owner).to_not eq nil
+      end
+
+      it 'render updated template' do
+        patch :update, params: {id: event,
+                                event: attributes_for(:invalid_event).merge(owner_id: nil), format: :js}
+        expect(response).to render_template :update
+      end
+    end
+  end
   #
   # describe 'DELETE #destroy' do
   #   sign_in_user
