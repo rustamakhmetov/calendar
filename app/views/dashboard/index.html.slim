@@ -2,7 +2,18 @@ h2 #{Date.today.strftime("%^B")}
 .month
   -Dashboard.monthdays(Date.today).each do |date|
     div id="day#{date.day}"
-      -current_user.events_by_date(date).each do |event|
-        div id="event#{event.id}"
-          p
-            =event.body
+      .events
+        -current_user.events_by_date(date).each do |event|
+          =render event
+
+  .new-event
+    = form_for Event.new, remote: true do |f|
+      = render 'shared/form_error', object: f.object
+      p
+        = f.label :date
+        = f.datetime_local_field :date, value: f.object.try(:strftime,"%d.%m.%Y"), class: 'form-control'
+      p
+        = f.label :body
+        = f.text_area :body
+      p
+        = f.submit 'Add'
