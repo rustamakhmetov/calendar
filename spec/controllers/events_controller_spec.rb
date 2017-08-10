@@ -72,26 +72,44 @@ RSpec.describe EventsController, type: :controller do
       end
     end
   end
-  #
-  # describe 'DELETE #destroy' do
-  #   sign_in_user
-  #
-  #   it 'deletes answer of author' do
-  #     answer = create(:answer, user: @user)
-  #     expect {delete :destroy, params: {id: answer, format: :js}}.to change(Answer, :count).by(-1)
-  #   end
-  #
-  #   it 'user can not delete answer of other author' do
-  #     answer1 = create(:answer, user: create(:user), question: answer.question)
-  #     expect {delete :destroy, params: {id: answer1, format: :js}}.to_not change(Answer, :count)
-  #   end
-  #
-  #   it 'redirects to question view' do
-  #     answer = create(:answer, user: @user)
-  #     delete :destroy, params: {id: answer, format: :js}
-  #     expect(response).to render_template :destroy
-  #   end
-  # end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+
+    it 'owner delete event' do
+      event = @user.create_event(Date.today, "new event")
+      expect {delete :destroy, params: {id: event, format: :js}}.to change(Event, :count).by(-1)
+    end
+
+    it 'user can not delete event of other owner' do
+      user1 = create(:user)
+      event1 = user1.create_event(Date.today, "new body")
+      expect {delete :destroy, params: {id: event1, format: :js}}.to_not change(Event, :count)
+    end
+
+    it 'render destroy template' do
+      event = @user.create_event(Date.today, "body body")
+      delete :destroy, params: {id: event, format: :js}
+      expect(response).to render_template :destroy
+    end
+
+    describe "shared event" do
+      let!(:user1) { create(:user) }
+      let!(:event1) { user1.create_event(Date.today, "new body") }
+
+      before {  event1.share(@user) }
+
+      it 'user can delete' do
+        expect {delete :destroy, params: {id: event1, format: :js}}.to change(@user.events, :count).by(-1)
+      end
+
+      it 'render destroy template' do
+        delete :destroy, params: {id: event1, format: :js}
+        expect(response).to render_template :destroy
+      end
+
+    end
+  end
   #
   # describe 'PATCH #accept' do
   #   sign_in_user

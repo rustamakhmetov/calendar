@@ -4,5 +4,17 @@ class Event < ApplicationRecord
 
   alias_attribute :date, :created_at
 
-  validates :body, presence: true
+  validates :owner, :body, presence: true
+
+  before_destroy :delete_parents
+
+  def share(user)
+    user.events << self unless user.events.exists?(self.id)
+  end
+
+  private
+
+  def delete_parents
+    self.owner.update_attributes!(event_id: nil)
+  end
 end

@@ -2,6 +2,8 @@ class EventsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_event, only: [:update, :destroy]
 
+  authorize_resource
+
   respond_to :js
 
   def create
@@ -14,11 +16,10 @@ class EventsController < ApplicationController
     @event.update(event_params)
     respond_with @event
   end
-  #
-  # def destroy
-  #   respond_with(@answer.destroy!)
-  # end
-  #
+
+  def destroy
+    respond_with(current_user.delete_event(@event))
+  end
 
   private
 

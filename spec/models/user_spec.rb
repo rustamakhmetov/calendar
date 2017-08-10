@@ -22,6 +22,34 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#delete_event" do
+    let(:user_dst) { create(:user) }
+    let!(:event) { user.create_event(Date.today, "text text") }
+
+    describe "as the owner" do
+      it "delete event from database" do
+        expect{user.delete_event(event)}.to change(Event, :count).by(-1)
+      end
+
+      it "delete shared event" do
+        event.share(user_dst)
+        expect{user.delete_event(event)}.to change(user_dst.events, :count).by(-1)
+      end
+    end
+
+    describe "as the non-owner" do
+      it "event don't delete from database" do
+        event.share(user_dst)
+        expect{user_dst.delete_event(event)}.to_not change(Event, :count)
+      end
+
+      it "event removed from user's event collection" do
+        event.share(user_dst)
+        expect{user_dst.delete_event(event)}.to change(user_dst.events, :count).by(-1)
+      end
+    end
+  end
+
   describe "#events_by_date" do
     let!(:events) { 5.times.map {|i| user.create_event(Date.today, "text text #{i}")} }
     let!(:events_yesterday) { 5.times.map {|i| user.create_event(Date.yesterday, "text text #{i}")} }

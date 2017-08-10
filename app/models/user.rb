@@ -13,6 +13,18 @@ class User < ApplicationRecord
     event
   end
 
+  def delete_event(event)
+    Event.transaction do
+      if event.owner&.id==self.id
+        self.update_attributes!(event_id: nil)
+        event.destroy!
+      else
+        self.events.destroy(event)
+      end
+      event
+    end
+  end
+
   def events_by_date(date)
     self.events.where("DATE(created_at) = ?", date)
   end

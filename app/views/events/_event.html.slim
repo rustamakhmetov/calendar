@@ -10,3 +10,6 @@ div id="event#{event.id}"
       = f.submit "Save"
   p
     =link_to "Edit", '', class: "edit-event-link", data: {event_id: event.id}
+  -if can?(:destroy, event)
+    p
+      =link_to 'Delete', event, method: :delete, remote: true

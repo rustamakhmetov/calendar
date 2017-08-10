@@ -40,6 +40,7 @@ gem 'devise-i18n-views'
 gem 'jquery-turbolinks'
 gem 'jquery-rails'
 gem 'rubocop', require: false
+gem 'cancancan'
 
 group :development, :test do
   gem 'rspec-rails'
