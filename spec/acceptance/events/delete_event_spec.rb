@@ -23,39 +23,19 @@ feature 'Delete event', %q{
   end
 
   describe "Non-owner" do
-    let!(:user_dst) { create(:user) }
+    given!(:user1) { create(:user) }
+    given!(:event) { user.create_event(Date.today, "text text") }
 
-    scenario "remove shared event", js: true do
-      event.share(user_dst)
-      sign_in(user_dst)
-
+    before do
+      event.share(user1)
+      sign_in user1
       visit root_path
-      event_css = "#event#{event.id}"
-      within event_css do
-        click_on "Delete"
+    end
+
+    scenario "don't see delete link" do
+      within "div#day#{event.date.day}" do
+        expect(page).to_not have_link('Delete')
       end
-      expect(page).to have_content 'Event was successfully destroyed.'
-      expect(current_path).to eq root_path
-      expect(page).to_not have_selector(event_css)
     end
   end
-  # scenario 'Authenticated author can not delete other answer', js: true do
-  #   sign_in(user)
-  #
-  #   answer = create(:answer, user: create(:user), question: question)
-  #   visit question_path(question)
-  #   within "#answer#{answer.id}" do
-  #     expect(page).to_not have_link "Delete"
-  #   end
-  # end
-  #
-  # scenario 'Non-authenticated user can not delete answers', js: true do
-  #   visit question_path(question)
-  #   question.answers.each do |answer|
-  #     within "#answer#{answer.id}" do
-  #       expect(page).to_not have_link "Delete"
-  #     end
-  #   end
-  # end
-
 end

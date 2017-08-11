@@ -99,13 +99,13 @@ RSpec.describe EventsController, type: :controller do
 
       before {  event1.share(@user) }
 
-      it 'user can delete' do
-        expect {delete :destroy, params: {id: event1, format: :js}}.to change(@user.events, :count).by(-1)
+      it "user don't delete" do
+        expect {delete :destroy, params: {id: event1, format: :js}}.to_not change(@user.events, :count)
       end
 
       it 'render destroy template' do
         delete :destroy, params: {id: event1, format: :js}
-        expect(response).to render_template :destroy
+        expect(response).to_not render_template :destroy
       end
     end
   end

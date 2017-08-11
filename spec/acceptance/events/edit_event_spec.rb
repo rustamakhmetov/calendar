@@ -38,27 +38,20 @@ feature 'Edit event', %q{
     end
   end
 
-  # describe 'Non owner' do
-  #   given!(:answer) { create(:answer, question: question, user: create(:user) ) }
-  #
-  #   before do
-  #     sign_in user
-  #     visit question_path(question)
-  #   end
-  #
-  #   scenario "don't see edit link" do
-  #     within '.answers' do
-  #       expect(page).to_not have_link('Edit')
-  #     end
-  #   end
-  #
-  #   scenario "don't see update form" do
-  #     within "#answer#{answer.id}" do
-  #       expect(page).to_not have_selector("form.edit_answer")
-  #       expect(page).to_not have_link('Save')
-  #     end
-  #   end
-  #
-  # end
+  describe "Non-owner" do
+    given!(:user1) { create(:user) }
+    given!(:event) { user.create_event(Date.today, "text text") }
 
+    before do
+      event.share(user1)
+      sign_in user1
+      visit root_path
+    end
+
+    scenario "don't see edit link" do
+      within "div#day#{event.date.day}" do
+        expect(page).to_not have_link('Edit')
+      end
+    end
+  end
 end
