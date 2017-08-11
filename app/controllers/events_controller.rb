@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_event, only: [:update, :destroy, :share]
+  before_action :load_event, only: [:update, :destroy, :share, :view]
 
   authorize_resource
 
@@ -23,6 +23,11 @@ class EventsController < ApplicationController
 
   def share
     respond_with(@event.share_by_email(event_params[:email]))
+  end
+
+  def view
+    @event.set_viewed(current_user, true) unless @event.viewed?(current_user)
+    respond_with(@event)
   end
 
   private

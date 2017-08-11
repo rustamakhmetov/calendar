@@ -19,28 +19,13 @@ class Ability
   def user_abilities
     guest_abilities
     can :create, Event
+    can :view, Event do |model|
+      !(@user.owner?(model) || model.viewed?(@user))
+    end
     can [:edit, :update, :destroy, :share], Event do |model|
-      @user==model.owner
+      @user.owner?(model)
     end
     can :index, Dashboard
-    # can :create, [Question, Answer, Comment]
-    # can [:update, :destroy], [Question, Answer, Comment], user: user
-    # can :accept, Answer do |answer|
-    #   !answer.accept && @user.author_of?(answer.question) && !@user.author_of?(answer)
-    # end
-    # can [:vote_up, :vote_down], [Question, Answer] do |model|
-    #   !@user.author_of?(model)
-    # end
-    # can :edit, [Question, Answer]
-    # can :manage, Vote
-    # can :manage, Attachment do |attach|
-    #   @user.author_of?(attach.attachable)
-    # end
-    # can :manage, Authorization
-    # can :create, Subscription
-    # can :destroy, Subscription do |subscription|
-    #   @user.author_of? subscription
-    # end
   end
 
   def admin_abilities

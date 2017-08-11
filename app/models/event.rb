@@ -24,9 +24,23 @@ class Event < ApplicationRecord
     self
   end
 
+  def set_viewed(user, value)
+    _share = event_share(user)
+    _share.update_attributes(viewed: value) if _share
+  end
+
+  def viewed?(user)
+    _share = event_share(user)
+    _share ? _share.viewed : false
+  end
+
   private
 
   def delete_parents
     self.owner.update_attributes!(event_id: nil)
+  end
+
+  def event_share(user)
+    shares.where(event_id: self.id, user_id: user.id).first
   end
 end

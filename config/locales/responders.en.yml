@@ -12,4 +12,6 @@ en:
         alert: '%{resource_name} could not be destroyed.'
       share:
         notice: '%{resource_name} was successfully shared.'
+      view:
+        notice: '%{resource_name} was successfully viewed.'
 

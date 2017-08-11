@@ -43,4 +43,24 @@ RSpec.describe Event, type: :model do
       end
     end
   end
+
+  describe "#set_viewed, #viewed?" do
+    let!(:user_src) { create(:user) }
+    let!(:user_dst) { create(:user) }
+    let!(:event) { user_src.create_event(Date.today, "text text") }
+
+    before { event.share(user_dst) }
+
+    it "not viewed event" do
+      expect(event.viewed?(user_src)).to eq false
+      expect(event.viewed?(user_dst)).to eq false
+    end
+
+    it "viewed event" do
+      event.set_viewed(user_dst, true)
+      expect(event.viewed?(user_dst)).to eq true
+      expect(event.viewed?(user_src)).to eq false
+    end
+
+  end
 end

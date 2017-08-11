@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :events do
     patch :share, on: :member
+    patch :view, on: :member
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

@@ -59,4 +59,25 @@ RSpec.describe User, type: :model do
       expect(user.events_by_date(Date.yesterday)).to match_array(events_yesterday)
     end
   end
+
+  describe "#owner?" do
+    let(:event) { user.create_event(Date.today, "text text") }
+    let(:user1) { create(:user) }
+
+    it "owner" do
+      expect(user.owner?(event)).to eq true
+    end
+
+    it "non-owner" do
+      event.share(user1)
+      expect(user1.owner?(event)).to eq false
+    end
+
+    it "invalid attribute" do
+      event.share(user1)
+      [nil, ""].each do |model|
+        expect(user1.owner?(model)).to eq false
+      end
+    end
+  end
 end

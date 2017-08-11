@@ -1,6 +1,10 @@
 div id="event#{event.id}"
   p
     =event.body
+  -if can?(:view, event)
+    p
+      =link_to "View", view_event_path(event), method: :patch, remote: true, id: "view#{event.id}"
+
   -if can?(:edit, event)
     = form_for event, html: {id: "edit_event_#{event.id}"}, remote: true do |f|
       = render 'shared/form_error', { object: f.object }

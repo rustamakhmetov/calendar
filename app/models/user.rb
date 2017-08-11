@@ -29,4 +29,8 @@ class User < ApplicationRecord
   def events_by_date(date)
     self.events.where("DATE(created_at) = ?", date)
   end
+
+  def owner?(model)
+    !!(model && model.is_a?(Event) && model.owner && self.id==model.owner.id)
+  end
 end

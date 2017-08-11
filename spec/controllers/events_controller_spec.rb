@@ -2,6 +2,32 @@ require 'rails_helper'
 
 RSpec.describe EventsController, type: :controller do
 
+  describe "PATCH #view" do
+    let!(:user1) { create(:user) }
+    let!(:event) { user1.create_event(Date.today, "text text") }
+
+    subject { patch :view, params: { id: event.id }, format: :js }
+
+    sign_in_user
+    before { event.share(@user) }
+
+    it "assigns event to @event" do
+      subject
+      expect(assigns("event")).to eq event
+    end
+
+    it "change viewed to true" do
+      expect(event.viewed?(@user)).to eq false
+      subject
+      expect(event.viewed?(@user)).to eq true
+    end
+
+    it 'render template view' do
+      subject
+      expect(response).to render_template :view
+    end
+  end
+
   describe 'POST #create' do
     sign_in_user
 
@@ -11,7 +37,7 @@ RSpec.describe EventsController, type: :controller do
       end
 
       it 'current user link to the new event' do
-        post 'create', params: { event: attributes_for(:event), format: :js }
+        post :create, params: { event: attributes_for(:event), format: :js }
         expect(assigns("event").owner).to eq @user
       end
 
