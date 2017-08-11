@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it { should have_and_belong_to_many(:events) }
+  it { should have_many(:events).through(:shares) }
 
   let!(:user) { create(:user) }
 

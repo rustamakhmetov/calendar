@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170810043004) do
+ActiveRecord::Schema.define(version: 20170811082130) do
 
   create_table "events", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "body"
@@ -18,12 +18,12 @@ ActiveRecord::Schema.define(version: 20170810043004) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "events_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "shares", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
     t.bigint "event_id"
-    t.index ["event_id"], name: "index_events_users_on_event_id"
-    t.index ["user_id", "event_id"], name: "index_events_users_on_user_id_and_event_id", unique: true
-    t.index ["user_id"], name: "index_events_users_on_user_id"
+    t.index ["event_id"], name: "index_shares_on_event_id"
+    t.index ["user_id", "event_id"], name: "index_shares_on_user_id_and_event_id", unique: true
+    t.index ["user_id"], name: "index_shares_on_user_id"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

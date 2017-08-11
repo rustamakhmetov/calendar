@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
   has_one :owner, class_name: "User"
-  has_and_belongs_to_many :users
+  has_many :shares
+  has_many :users, through: :shares
 
   alias_attribute :date, :created_at
   attr_accessor :email
