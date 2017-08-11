@@ -1,0 +1,8 @@
+<%= render 'layouts/flash_messages' %>
+
+<% if @event.errors.empty? %>
+  $("form#share_event_<%= @event.id %>").hide();
+  $("div#event<%= @event.id %> > p > a.share-event-link").show();
+<% else %>
+  $("div#error_explanation<%= @event.id %>").html('<%= j render "shared/form_error", { object: @event } %>')
+<% end %>

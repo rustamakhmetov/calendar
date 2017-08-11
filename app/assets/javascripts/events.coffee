@@ -9,5 +9,11 @@ ready = ->
     event_id = $(this).data('eventId')
     $('form#edit_event_' + event_id).show();
 
+  $('.share-event-link').click (e) ->
+    e.preventDefault();
+    $(this).hide();
+    event_id = $(this).data('eventId')
+    $('form#share_event_' + event_id).show();
+
 $(document).ready(ready);
 $(document).on('turbolinks:load', ready);

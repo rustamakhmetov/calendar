@@ -107,87 +107,49 @@ RSpec.describe EventsController, type: :controller do
         delete :destroy, params: {id: event1, format: :js}
         expect(response).to render_template :destroy
       end
-
     end
   end
-  #
-  # describe 'PATCH #accept' do
-  #   sign_in_user
-  #
-  #   context "Author of question" do
-  #     let!(:question) { create(:question, user: @user) }
-  #     let!(:answer) { create(:answer, question: question) }
-  #
-  #     it 'assigns the requested answer to @answer' do
-  #       patch :accept, params: {id: answer, format: :js}
-  #       expect(assigns(:answer)).to eq answer
-  #     end
-  #
-  #     it 'change answer accept attribute' do
-  #       expect(answer.accept).to eq false
-  #       patch :accept, params: {id: answer, format: :js}
-  #       answer.reload
-  #       expect(answer.accept).to eq true
-  #     end
-  #
-  #     it 'reset accept field of other answers from the question' do
-  #       answer2 = create(:answer, question: question, accept: true)
-  #       answer3 = create(:answer, question: question, accept: true)
-  #
-  #       patch :accept, params: {id: answer, format: :js}
-  #       answer.reload
-  #       answer2.reload
-  #       answer3.reload
-  #       expect(answer.accept).to eq true
-  #       expect(answer2.accept).to eq false
-  #       expect(answer3.accept).to eq false
-  #     end
-  #
-  #     it 'render accept template' do
-  #       patch :accept, params: {id: answer, format: :js}
-  #       expect(response).to render_template :accept
-  #     end
-  #   end
-  #
-  #   context "Non-author of question" do
-  #     it 'current user is not the author of the question' do
-  #       expect(@user).to_not eq question.user
-  #     end
-  #
-  #     it 'assigns the requested answer to @answer' do
-  #       patch :accept, params: {id: answer, format: :js}
-  #       expect(assigns(:answer)).to eq answer
-  #     end
-  #
-  #     it 'not change answer accept attribute' do
-  #       expect(answer.accept).to eq false
-  #       patch :accept, params: {id: answer, format: :js}
-  #       answer.reload
-  #       expect(answer.accept).to eq false
-  #     end
-  #
-  #     it 'not reset accept field of other answers from the question' do
-  #       answer2 = create(:answer, question: question, accept: true)
-  #       answer3 = create(:answer, question: question, accept: true)
-  #
-  #       patch :accept, params: {id: answer, format: :js}
-  #       answer.reload
-  #       answer2.reload
-  #       answer3.reload
-  #       expect(answer.accept).to eq false
-  #       expect(answer2.accept).to eq true
-  #       expect(answer3.accept).to eq true
-  #     end
-  #
-  #     it 'redirect to root path' do
-  #       patch :accept, params: {id: answer, format: :js}
-  #       #expect(response).to render_template :accept
-  #       expect(response).to redirect_to root_url
-  #     end
-  #   end
-  # end
-  #
-  # it_behaves_like "voted" do
-  #   let(:object) { answer }
-  # end
+
+  describe 'PATCH #share' do
+    sign_in_user
+
+    let!(:user1) { create(:user) }
+    let!(:event) { @user.create_event(Date.today, "new event") }
+
+    describe "with valid attributes" do
+      subject { patch :share, params: { id: event, event: { email:user1.email }, format: :js } }
+
+      it 'assigns the requested event to @event' do
+        subject
+        expect(assigns(:event)).to eq event
+      end
+
+      it "event saved to the users's event collection" do
+        expect { subject }.to change(user1.events, :count).by(1)
+      end
+
+      it 'render share template' do
+        subject
+        expect(response).to render_template :share
+      end
+    end
+
+    describe "with invalid attributes" do
+      subject { patch :share, params: { id: event, event: { email: nil }, format: :js } }
+
+      it 'assigns the requested event to @event' do
+        subject
+        expect(assigns(:event)).to eq event
+      end
+
+      it "event don't saved to the users's event collection" do
+        expect { subject }.to_not change(user1.events, :count)
+      end
+
+      it 'render share template' do
+        subject
+        expect(response).to render_template :share
+      end
+    end
+  end
 end

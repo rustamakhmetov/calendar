@@ -2,14 +2,27 @@ div id="event#{event.id}"
   p
     =event.body
   = form_for event, html: {id: "edit_event_#{event.id}"}, remote: true do |f|
-    = render 'shared/form_error', object: f.object
+    = render 'shared/form_error', { object: f.object }
     p
       = f.label :body
       = f.text_area :body
     p
       = f.submit "Save"
+
+
   p
     =link_to "Edit", '', class: "edit-event-link", data: {event_id: event.id}
   -if can?(:destroy, event)
     p
       =link_to 'Delete', event, method: :delete, remote: true
+  -if can?(:share, event)
+    = form_for event, url: share_event_path(event), html: {id: "share_event_#{event.id}", class: "share_event"},
+            remote: true, method: :patch do |f|
+      = render 'shared/form_error', {object: f.object}
+      p
+        = f.label :email
+        = f.text_field :email
+      p
+        = f.submit "Send"
+    p
+      =link_to 'Share', '', class: "share-event-link", data: {event_id: event.id}

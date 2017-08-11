@@ -35,44 +35,4 @@ feature "User can add event", %q{
     end
     expect(page).to have_content 'Body can\'t be blank'
   end
-
-  #
-  # context "multiple sessions" do
-  #   given!(:question2) { create(:question) }
-  #   scenario "answer on question appears on another user's page", js: true do
-  #     Capybara.using_session('user') do
-  #       sign_in user
-  #       visit question_path(question)
-  #       expect(page).to have_content question.title
-  #       expect(page).to have_content question.body
-  #     end
-  #
-  #     Capybara.using_session('guest') do
-  #       visit question_path(question)
-  #     end
-  #
-  #     Capybara.using_session('guest2') do
-  #       visit question_path(question2)
-  #     end
-  #
-  #     Capybara.using_session('user') do
-  #       within("form.new_answer") do
-  #         fill_in 'Body', with: 'text text'
-  #         click_on 'Ask answer'
-  #         wait_for_ajax
-  #       end
-  #       expect(page).to have_content 'Answer was successfully created'
-  #       expect(page).to have_content 'text text'
-  #     end
-  #
-  #     Capybara.using_session('guest') do
-  #       expect(page).to have_content 'text text'
-  #     end
-  #
-  #     Capybara.using_session('guest2') do
-  #       expect(page).to_not have_content 'text text'
-  #     end
-  #   end
-  # end
-
 end

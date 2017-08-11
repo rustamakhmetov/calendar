@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_event, only: [:update, :destroy]
+  before_action :load_event, only: [:update, :destroy, :share]
 
   authorize_resource
 
@@ -21,6 +21,10 @@ class EventsController < ApplicationController
     respond_with(current_user.delete_event(@event))
   end
 
+  def share
+    respond_with(@event.share_by_email(event_params[:email]))
+  end
+
   private
 
   def load_event
@@ -28,6 +32,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:date, :body)
+    params.require(:event).permit(:date, :body, :email)
   end
 end

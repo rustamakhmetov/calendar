@@ -19,6 +19,7 @@ describe Ability do
   describe "for user" do
     let(:user) { create(:user) }
     let(:other_user) { create(:user) }
+    let(:owner_event) { user.create_event(Date.today, "text text") }
     # let(:question) { create(:question, user: user) }
     # let(:other_question) { create(:question, user: other_user) }
     # let(:answer) { create(:answer, user: user) }
@@ -32,8 +33,10 @@ describe Ability do
     it { should be_able_to :read, :all }
 
     it { should be_able_to :create, Event }
-    it { should be_able_to [:edit, :update, :destroy], user.create_event(Date.today, "text text") }
+    it { should be_able_to [:edit, :update, :destroy, :share], owner_event }
     it { should_not be_able_to [:edit, :update, :destroy], create(:user).create_event(Date.today, "text text") }
+
+
 
     it { should be_able_to :index, Dashboard }
 

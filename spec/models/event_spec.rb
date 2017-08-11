@@ -20,4 +20,27 @@ RSpec.describe Event, type: :model do
       expect {2.times {event.share(user_dst)} }.to change(user_dst.events, :count).by(1)
     end
   end
+
+  describe "#share_by_email" do
+    let!(:user_src) { create(:user) }
+    let!(:user_dst) { create(:user) }
+    let!(:event) { user_src.create_event(Date.today, "text text") }
+
+    describe "with valid attributes" do
+      it "add event to user_dst event's collection" do
+        event.share_by_email(user_dst.email)
+        expect(user_dst.events.first).to eq event
+      end
+    end
+
+    describe "with invalid attributes" do
+      it "return error message" do
+        [nil, "", "unknow@test.com"].each do |email|
+          event.errors.clear
+          event.share_by_email(email)
+          expect(event.errors.full_messages).to eq ["User not exists"]
+        end
+      end
+    end
+  end
 end

@@ -20,7 +20,7 @@ class Ability
     guest_abilities
     can :create, Event
     can :destroy, Event
-    can [:edit, :update], Event do |model|
+    can [:edit, :update, :share], Event do |model|
       @user==model.owner
     end
     can :index, Dashboard
