@@ -1,0 +1,8 @@
+div id="error_explanation#{local_assigns[:object].id}"
+  - if local_assigns[:object]&.errors.any?
+      h2
+        = pluralize(local_assigns[:object].errors.count, "error")
+        |  prohibited this #{local_assigns[:object].class.name} from being saved:
+      ul
+        - local_assigns[:object].errors.full_messages.each do |msg|
+          li= msg

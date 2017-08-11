@@ -1,0 +1,5 @@
+<%= render 'layouts/flash_messages' %>
+
+<% if @event.errors.empty? %>
+  $("#event<%= @event.id %>").remove();
+<% end %>

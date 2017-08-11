@@ -9,6 +9,21 @@
   </head>
 
   <body>
+    <div id="flash_messages"></div>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <div class="user">
+      <% unless devise_controller? %>
+          <% if user_signed_in? %>
+              <li><%= link_to 'Edit', edit_user_registration_path, data: {user_id: current_user.id}, id: "edit" %></li>
+              <li><%= link_to 'Log out', destroy_user_session_path, method: :delete, data: {user_id: current_user.id}, id: "logout" %></li>
+          <% else %>
+              <li><%= link_to 'Log in', new_user_session_path  %></li>
+          <% end %>
+      <% end %>
+    </div>
+
     <%= yield %>
   </body>
 </html>

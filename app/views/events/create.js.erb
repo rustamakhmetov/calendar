@@ -1,0 +1,5 @@
+<%= render 'layouts/flash_messages' %>
+
+<% if @event.errors.empty? %>
+  $("div#day<%= @event.date.day %> > .events").append('<%= j render @event %>');
+<% end %>
